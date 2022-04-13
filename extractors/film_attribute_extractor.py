@@ -1,12 +1,15 @@
+from typing import Optional
 from bs4 import BeautifulSoup
 import unicodedata
+
+from services import TypesConvertingService
 
 
 class FilmAttributeExtractor:
     def __init__(self, key: str):
         self.key = key
 
-    def extract(self, soup: BeautifulSoup):
+    def extract(self, soup: BeautifulSoup) -> Optional[str]:
         key_div = soup.find("div", string=self.key)
         if key_div is None:
             return None
@@ -36,3 +39,15 @@ class FilmAttributeExtractor:
 
     def __normalize_string(self, value: str) -> str:
         return unicodedata.normalize("NFKC", value)
+
+
+class IntAttributeExtractor(FilmAttributeExtractor):
+    def __init__(
+            self,
+            key: str,
+            types_converting_service: TypesConvertingService):
+        super().__init__(key)
+        self.types_converting_service = types_converting_service
+
+    def extract(self, soup: BeautifulSoup) -> Optional[int]:
+        return self.types_converting_service.to_int(super().extract(soup))

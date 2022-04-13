@@ -3,9 +3,17 @@ from pathlib import Path
 from dependencies import Dependencies
 from repositories import FilmRepository
 from translators import FilmTranslator
-from services import ValidationService, FilmService
+from services import (
+    ValidationService,
+    FilmService,
+    TypesConvertingService,
+)
 from validators import PresenceValidator, TypeValidator
-
+from extractors import (
+    FilmAttributeExtractor,
+    FilmTitleExtractor,
+    IntAttributeExtractor,
+)
 
 root_dir_path = Path(__file__).parent
 resources_path = root_dir_path / "resources"
@@ -23,6 +31,14 @@ film_repository = FilmRepository(
     ),
     film_translator=film_translator,
     indexes=[],
+)
+# Services Without Entities
+types_converting_service = TypesConvertingService()
+
+# Extractors
+year_extractor = IntAttributeExtractor(
+    "Год производства",
+    types_converting_service,
 )
 
 # Validators
@@ -80,7 +96,6 @@ create_film_validation_service = ValidationService(
         *create_film_type_validators,
     ]
 )
-
 
 # Services
 film_service = FilmService(
