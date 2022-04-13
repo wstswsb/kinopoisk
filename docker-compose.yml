@@ -1,0 +1,44 @@
+version: "3.5"
+services:
+
+  kinopoisk:
+    build: "."
+    image: "${APP_NAME}:latest"
+    env_file: "./.env"
+    container_name: "kinopoisk"
+    restart: "unless-stopped"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+    ports:
+      - "10000:10000"
+    volumes:
+      - "~/${DOCKER_SHARED_VOLUME_PATH}/${APP_NAME}/kinopoisk:/docker_shared_volume"
+    depends_on:
+      - mongo
+    networks:
+      - kinopoisk
+
+  mongo:
+    image: mongo:3.6
+    container_name: mongo
+    restart: "unless-stopped"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+    ports:
+      - "27017:27017"
+    volumes:
+      - "~/${DOCKER_SHARED_VOLUME_PATH}/${APP_NAME}/mongo:/data/db"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    networks:
+      - kinopoisk
+networks:
+  kinopoisk:
+    name: kinopoisk
