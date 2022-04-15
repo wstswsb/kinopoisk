@@ -6,13 +6,20 @@ from translators import FilmTranslator
 from services import (
     ValidationService,
     FilmService,
-    TypesConvertingService,
+    FilmParsingService,
 )
+from services.tools import TypesConvertingService
+from wrappers import ChromiumWrapper
 from validators import PresenceValidator, TypeValidator
 from extractors import (
-    FilmAttributeExtractor,
     FilmTitleExtractor,
+    AttributeExtractor,
     IntAttributeExtractor,
+    ListAttributeExtractor,
+    FeesExtractor,
+    WorldFeesExtractor,
+    PremiereExtractor,
+    RatingExtractor,
 )
 
 root_dir_path = Path(__file__).parent
@@ -36,10 +43,38 @@ film_repository = FilmRepository(
 types_converting_service = TypesConvertingService()
 
 # Extractors
+title_extractor = FilmTitleExtractor()
 year_extractor = IntAttributeExtractor(
     "Год производства",
     types_converting_service,
+    key_alias="year",
 )
+country_extractor = AttributeExtractor("Страна", "country")
+genre_extractor = ListAttributeExtractor("Жанр", "genre")
+slogan_extractor = AttributeExtractor("Слоган", "slogan")
+directors_extractor = ListAttributeExtractor("Режиссер", "directors")
+screenwriters_extractor = ListAttributeExtractor("Сценарий", "screenwriters")
+producers_extractor = ListAttributeExtractor("Продюсер", "producers")
+operators_extractor = ListAttributeExtractor("Оператор", "operators")
+composers_extractor = ListAttributeExtractor("Композитор", "composers")
+artists_extractor = ListAttributeExtractor("Художник", "artists")
+editors_extractor = ListAttributeExtractor("Монтаж", "editors")
+budget_extractor = FeesExtractor("Бюджет", "budget")
+usa_fees_extractor = FeesExtractor("Сборы в США", "usa_fees")
+rus_fees_extractor = FeesExtractor("Сборы в России", "rus_fees")
+world_fees_extractor = WorldFeesExtractor("Сборы в мире", "world_fees")
+premiere_in_russia_extractor = PremiereExtractor(
+    "Премьера в Росcии",
+    "premiere_in_russia",
+)
+premiere_in_world_extractor = PremiereExtractor(
+    "Премьера в мире",
+    "premiere_in_world",
+)
+dvd_release_extractor = AttributeExtractor("Релиз на DVD", "dvd_release")
+age_restrictions_extractor = AttributeExtractor("Возраст", "age_restrictions")
+rating_mpaa_extractor = RatingExtractor("Рейтинг MPAA", "rating_mpaa")
+duration_extractor = AttributeExtractor("Время", "duration")
 
 # Validators
 create_film_presence_validators = [
@@ -97,8 +132,40 @@ create_film_validation_service = ValidationService(
     ]
 )
 
+# Wrappers
+chromium_wrapper = ChromiumWrapper()
+
 # Services
+film_parsing_service = FilmParsingService(
+    chromium_wrapper,
+    title_extractor,
+    attributes_extractors=[
+        year_extractor,
+        country_extractor,
+        genre_extractor,
+        slogan_extractor,
+        directors_extractor,
+        screenwriters_extractor,
+        producers_extractor,
+        operators_extractor,
+        composers_extractor,
+        artists_extractor,
+        editors_extractor,
+        budget_extractor,
+        usa_fees_extractor,
+        rus_fees_extractor,
+        world_fees_extractor,
+        premiere_in_russia_extractor,
+        premiere_in_world_extractor,
+        dvd_release_extractor,
+        age_restrictions_extractor,
+        rating_mpaa_extractor,
+        duration_extractor,
+    ]
+
+)
 film_service = FilmService(
     film_repository,
+    film_parsing_service,
     create_film_validation_service,
 )
