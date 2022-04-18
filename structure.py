@@ -10,7 +10,7 @@ from services import (
 )
 from services.tools import TypesConvertingService
 from wrappers import ChromiumWrapper
-from validators import PresenceValidator, TypeValidator
+from validators import TypeValidator
 from extractors import (
     FilmTitleExtractor,
     AttributeExtractor,
@@ -76,59 +76,31 @@ age_restrictions_extractor = AttributeExtractor("Возраст", "age_restricti
 rating_mpaa_extractor = RatingExtractor("Рейтинг MPAA", "rating_mpaa")
 duration_extractor = AttributeExtractor("Время", "duration")
 
-# Validators
-create_film_presence_validators = [
-    PresenceValidator("title"),
-    PresenceValidator("year"),
-    PresenceValidator("country"),
-    PresenceValidator("genre"),
-    PresenceValidator("slogan"),
-    PresenceValidator("directors"),
-    PresenceValidator("screenwriters"),
-    PresenceValidator("producers"),
-    PresenceValidator("operators"),
-    PresenceValidator("composers"),
-    PresenceValidator("artists"),
-    PresenceValidator("editors"),
-    PresenceValidator("budget"),
-    PresenceValidator("usa_fees"),
-    PresenceValidator("world_fees"),
-    PresenceValidator("premiere_in_russia"),
-    PresenceValidator("premiere_in_world"),
-    PresenceValidator("dvd_release"),
-    PresenceValidator("age_restrictions"),
-    PresenceValidator("MPAA_rating"),
-    PresenceValidator("duration"),
-]
-create_film_type_validators = [
-    TypeValidator("title", str),
-    TypeValidator("year", int),
-    TypeValidator("country", str),
-    TypeValidator("genre", str),
-    TypeValidator("slogan", str),
-    TypeValidator("directors", list),
-    TypeValidator("screenwriters", list),
-    TypeValidator("producers", list),
-    TypeValidator("operators", list),
-    TypeValidator("composers", list),
-    TypeValidator("artists", list),
-    TypeValidator("editors", list),
-    TypeValidator("budget", str),
-    TypeValidator("usa_fees", str),
-    TypeValidator("world_fees", str),
-    TypeValidator("premiere_in_russia", str),
-    TypeValidator("premiere_in_world", str),
-    TypeValidator("dvd_release", str),
-    TypeValidator("age_restrictions", str),
-    TypeValidator("MPAA_rating", str),
-    TypeValidator("duration", str),
-
-]
 # Validation Services
 create_film_validation_service = ValidationService(
     [
-        *create_film_presence_validators,
-        *create_film_type_validators,
+        TypeValidator("title", str),
+        TypeValidator("year", int),
+        TypeValidator("country", str),
+        TypeValidator("genre", list),
+        TypeValidator("slogan", str),
+        TypeValidator("directors", list),
+        TypeValidator("screenwriters", list),
+        TypeValidator("producers", list),
+        TypeValidator("operators", list),
+        TypeValidator("composers", list),
+        TypeValidator("artists", list),
+        TypeValidator("editors", list),
+        TypeValidator("budget", str),
+        TypeValidator("usa_fees", str),
+        TypeValidator("rus_fees", str),
+        TypeValidator("world_fees", str),
+        TypeValidator("premiere_in_russia", str),
+        TypeValidator("premiere_in_world", str),
+        TypeValidator("dvd_release", str),
+        TypeValidator("age_restrictions", str),
+        TypeValidator("rating_mpaa", str),
+        TypeValidator("duration", str),
     ]
 )
 
@@ -162,8 +134,8 @@ film_parsing_service = FilmParsingService(
         rating_mpaa_extractor,
         duration_extractor,
     ]
-
 )
+
 film_service = FilmService(
     film_repository,
     film_parsing_service,

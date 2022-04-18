@@ -24,7 +24,7 @@ class FilmTranslator:
             "premiere_in_world": model.premiere_in_world,
             "dvd_release": model.dvd_release,
             "age_restrictions": model.age_restrictions,
-            "MPAA_rating": model.MPAA_rating,
+            "MPAA_rating": model.rating_mpaa,
             "duration": model.duration,
         }
 
@@ -50,6 +50,6 @@ class FilmTranslator:
         film.premiere_in_world = document.get("premiere_in_world")
         film.dvd_release = document.get("dvd_release")
         film.age_restrictions = document.get("age_restrictions")
-        film.MPAA_rating = document.get("MPAA_rating")
+        film.rating_mpaa = document.get("MPAA_rating")
         film.duration = document.get("duration")
         return film

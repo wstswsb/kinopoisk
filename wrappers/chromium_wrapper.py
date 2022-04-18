@@ -5,6 +5,7 @@ from selenium.webdriver.support.expected_conditions import (
     presence_of_element_located,
 )
 import selenium.webdriver
+from random import choice
 
 
 class ChromiumWrapper:
@@ -26,19 +27,69 @@ class ChromiumWrapper:
         return options
 
     @property
-    def page_source(self):
+    def page_source(self) -> str:
         return self.driver.page_source
 
-    def get_in_new_tab(self, url: str):
+    def get_in_new_tab(self, url: str) -> None:
         self.driver.switch_to.new_window("tab")
+        self.set_random_user_agent()
         self.driver.get(url)
 
-    def close_tab(self):
+    def close_tab(self) -> None:
         self.driver.close()
         self.driver.switch_to.window(self.origin_tab)
 
-    def get_wait(self, duration: int):
+    def get_wait(self, duration: int) -> "ExplicitWaitWrapper":
         return ExplicitWaitWrapper(self.driver, duration)
+
+    def set_random_user_agent(self) -> None:
+        self.driver.execute_cdp_cmd(
+            'Network.setUserAgentOverride',
+            {"userAgent": self.get_random_user_agent()},
+        )
+
+    def get_random_user_agent(self) -> str:
+        user_agents = [
+            'Mozilla/5.0 (Windows NT 6.1; WOW64) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/54.0.2840.99 Safari/537.36',
+
+            'Mozilla/5.0 (Windows NT 10.0; WOW64) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/54.0.2840.99 Safari/537.36',
+
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/54.0.2840.99 Safari/537.36',
+
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) '
+            'AppleWebKit/602.2.14 (KHTML, '
+            'like Gecko) Version/10.0.1 Safari/602.2.14',
+
+            'Mozilla/5.0 (Windows NT 10.0; WOW64) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/54.0.2840.71 Safari/537.36',
+
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) '
+            'AppleWebKit/537.36 (KHTML, '
+            'like Gecko) Chrome/54.0.2840.98 Safari/537.36',
+
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) '
+            'AppleWebKit/537.36 (KHTML, '
+            'like Gecko) Chrome/54.0.2840.98 Safari/537.36',
+
+            'Mozilla/5.0 (Windows NT 6.1; WOW64) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/54.0.2840.71 Safari/537.36',
+
+            'Mozilla/5.0 (Windows NT 6.1; Win64; x64) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/54.0.2840.99 Safari/537.36',
+
+            'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) '
+            'Gecko/20100101 Firefox/50.0'
+        ]
+        return choice(user_agents)
 
 
 class ExplicitWaitWrapper:

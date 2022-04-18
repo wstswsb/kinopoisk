@@ -19,12 +19,13 @@ class Film:
         self.editors: Optional[list[str]] = None
         self.budget: Optional[str] = None
         self.usa_fees: Optional[str] = None
+        self.rus_fees: Optional[str] = None
         self.world_fees: Optional[str] = None
         self.premiere_in_russia: Optional[str] = None
         self.premiere_in_world: Optional[str] = None
         self.dvd_release: Optional[str] = None
         self.age_restrictions: Optional[str] = None
-        self.MPAA_rating: Optional[str] = None
+        self.rating_mpaa: Optional[str] = None
         self.duration: Optional[str] = None
 
     @staticmethod
@@ -44,11 +45,12 @@ class Film:
         film.editors = attrs.get("editors")
         film.budget = attrs.get("budget")
         film.usa_fees = attrs.get("usa_fees")
+        film.rus_fees = attrs.get("rus_fees")
         film.world_fees = attrs.get("world_fees")
         film.premiere_in_russia = attrs.get("premiere_in_russia")
         film.premiere_in_world = attrs.get("premiere_in_world")
         film.dvd_release = attrs.get("dvd_release")
         film.age_restrictions = attrs.get("age_restrictions")
-        film.MPAA_rating = attrs.get("MPAA_rating")
+        film.rating_mpaa = attrs.get("rating_mpaa")
         film.duration = attrs.get("duration")
         return film
