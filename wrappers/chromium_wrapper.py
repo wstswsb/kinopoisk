@@ -12,6 +12,7 @@ class ChromiumWrapper:
     def __init__(self):
         self.driver = selenium.webdriver.Chrome(options=self.__get_options())
         self.driver.maximize_window()
+        self.driver.implicitly_wait(2)
         self.origin_tab = self.driver.current_window_handle
 
     def __get_options(self) -> Options:
@@ -34,6 +35,10 @@ class ChromiumWrapper:
         self.driver.switch_to.new_window("tab")
         self.set_random_user_agent()
         self.driver.get(url)
+
+    def scroll_down(self):
+        driver_script = "window.scrollTo(0, document.body.scrollHeight);"
+        self.driver.execute_script(driver_script)
 
     def close_tab(self) -> None:
         self.driver.close()

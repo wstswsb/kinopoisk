@@ -4,15 +4,15 @@ from dependencies import Dependencies
 from repositories import FilmRepository
 from translators import FilmTranslator
 from services import (
-    ValidationService,
     FilmService,
     FilmParsingService,
+    FilmScrapingService,
 )
 from services.tools import TypesConvertingService
 from wrappers import ChromiumWrapper
-from validators import TypeValidator
 from extractors import (
     FilmTitleExtractor,
+    RelativeLinksExtractor,
     AttributeExtractor,
     IntAttributeExtractor,
     ListAttributeExtractor,
@@ -44,6 +44,7 @@ types_converting_service = TypesConvertingService()
 
 # Extractors
 title_extractor = FilmTitleExtractor()
+relative_links_extractor = RelativeLinksExtractor()
 year_extractor = IntAttributeExtractor(
     "Год производства",
     types_converting_service,
@@ -76,33 +77,6 @@ age_restrictions_extractor = AttributeExtractor("Возраст", "age_restricti
 rating_mpaa_extractor = RatingExtractor("Рейтинг MPAA", "rating_mpaa")
 duration_extractor = AttributeExtractor("Время", "duration")
 
-# Validation Services
-create_film_validation_service = ValidationService(
-    [
-        TypeValidator("title", str),
-        TypeValidator("year", int),
-        TypeValidator("country", str),
-        TypeValidator("genre", list),
-        TypeValidator("slogan", str),
-        TypeValidator("directors", list),
-        TypeValidator("screenwriters", list),
-        TypeValidator("producers", list),
-        TypeValidator("operators", list),
-        TypeValidator("composers", list),
-        TypeValidator("artists", list),
-        TypeValidator("editors", list),
-        TypeValidator("budget", str),
-        TypeValidator("usa_fees", str),
-        TypeValidator("rus_fees", str),
-        TypeValidator("world_fees", str),
-        TypeValidator("premiere_in_russia", str),
-        TypeValidator("premiere_in_world", str),
-        TypeValidator("dvd_release", str),
-        TypeValidator("age_restrictions", str),
-        TypeValidator("rating_mpaa", str),
-        TypeValidator("duration", str),
-    ]
-)
 
 # Wrappers
 chromium_wrapper = ChromiumWrapper()
@@ -110,6 +84,7 @@ chromium_wrapper = ChromiumWrapper()
 # Services
 film_parsing_service = FilmParsingService(
     chromium_wrapper,
+    relative_links_extractor,
     title_extractor,
     attributes_extractors=[
         year_extractor,
@@ -136,8 +111,9 @@ film_parsing_service = FilmParsingService(
     ]
 )
 
-film_service = FilmService(
-    film_repository,
+film_service = FilmService(film_repository)
+
+film_scraping_service = FilmScrapingService(
     film_parsing_service,
-    create_film_validation_service,
+    film_service,
 )

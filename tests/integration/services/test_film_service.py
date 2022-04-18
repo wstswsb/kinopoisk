@@ -1,14 +1,21 @@
+import pytest
 from structure import film_service, film_repository
 
 
 class TestFilmService:
     def setup(self):
         self.service = film_service
+        self.repository = film_repository
+        self.collection = self.repository.collection
 
+    def teardown(self):
+        self.collection.delete_many({})
+
+    @pytest.mark.skip()
     def test_create_by_url(self):
         url = "https://www.kinopoisk.ru/film/77443"
         model = self.service.create_by_url(url)
-        db_document = film_repository.find_by_id(model.id)
+        db_document = self.collection.find_one({"_id": model.id})
 
         assert db_document["year"] == 2005
         assert db_document["country"] == "США"

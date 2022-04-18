@@ -1,3 +1,5 @@
+import pytest
+from time import sleep
 from structure import film_parsing_service
 
 
@@ -5,9 +7,11 @@ class TestFilmParsingService:
     def setup(self):
         self.service = film_parsing_service
 
+    @pytest.mark.skip()
     def test_parse_film_by_url(self):
         url = "https://www.kinopoisk.ru/film/77443/"
         result = self.service.parse_by_url(url)
+        sleep(3)  # in order to avoid blocking
 
         assert result["year"] == 2005
         assert result["country"] == "США"

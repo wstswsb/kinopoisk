@@ -8,3 +8,4 @@ from .attribute_extractor import (
     PremiereExtractor,
     RatingExtractor,
 )
+from .relative_links_extractor import RelativeLinksExtractor
