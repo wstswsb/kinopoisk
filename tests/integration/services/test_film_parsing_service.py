@@ -1,17 +1,21 @@
-import pytest
-from time import sleep
-from structure import film_parsing_service
+from pathlib import Path
+from structure import film_parsing_service, resources_path
 
 
 class TestFilmParsingService:
     def setup(self):
         self.service = film_parsing_service
 
-    @pytest.mark.skip()
+    def get_page_source(self):
+        if hasattr(self, "page_source"):
+            return self.page_source
+
+        path = Path(resources_path, "page_sources", "sin_city.html")
+        self.page_source = path.read_text()
+        return self.page_source
+
     def test_parse_film_by_url(self):
-        url = "https://www.kinopoisk.ru/film/77443/"
-        result = self.service.parse_by_url(url)
-        sleep(3)  # in order to avoid blocking
+        result = self.service.parse(self.get_page_source())
 
         assert result["year"] == 2005
         assert result["country"] == "США"

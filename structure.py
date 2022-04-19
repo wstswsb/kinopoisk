@@ -79,6 +79,7 @@ duration_extractor = AttributeExtractor("Время", "duration")
 
 
 # Wrappers
+
 chromium_wrapper = ChromiumWrapper()
 
 # Services
@@ -114,6 +115,7 @@ film_parsing_service = FilmParsingService(
 film_service = FilmService(film_repository)
 
 film_scraping_service = FilmScrapingService(
+    chromium_wrapper,
     film_parsing_service,
     film_service,
 )

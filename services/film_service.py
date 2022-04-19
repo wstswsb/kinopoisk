@@ -1,7 +1,6 @@
-from click import echo
-
 from models import Film
 from repositories import FilmRepository
+from loggers import app_logger
 
 
 class FilmService:
@@ -11,7 +10,7 @@ class FilmService:
         self.repository = repository
 
     def create(self, attrs: dict) -> Film:
-        echo(f"film {attrs = }")
+        app_logger.debug(f"Creating film with title: {attrs.get('title')}")
         film = Film.from_attrs(attrs)
         film.id = self.repository.create(film)
         return film

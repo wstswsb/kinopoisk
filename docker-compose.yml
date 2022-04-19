@@ -3,6 +3,7 @@ services:
 
   kinopoisk:
     build: "."
+    shm_size: "${SHM_SIZE}"
     image: "${APP_NAME}:latest"
     env_file: "./.env"
     container_name: "kinopoisk"
