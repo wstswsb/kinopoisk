@@ -4,19 +4,13 @@ from structure import resources_path
 from extractors.film import AttributeExtractor
 
 
-def read_page_source():
-    path = Path(resources_path, "page_sources", "sin_city.html")
-    return path.read_text()
-
-
-page_source = read_page_source()
-soup = BeautifulSoup(page_source, "lxml")
-
-
 class TestAttributeExtractor:
-    def setup(self):
-        self.page_source = page_source
-        self.soup = soup
+    page_source = Path(
+        resources_path,
+        "page_sources",
+        "sin_city.html"
+    ).read_text()
+    soup = BeautifulSoup(page_source, "lxml")
 
     def test_extract_year(self):
         extractor = AttributeExtractor("Год производства")

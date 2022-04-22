@@ -1,18 +1,18 @@
 from pathlib import Path
 from bs4 import BeautifulSoup
-from extractors.film import RelativeLinksExtractor
-from structure import resources_path
+from structure import resources_path, relative_links_extractor
 
 
 class TestRelativeLinksExtractor:
-    def setup(self):
-        self.page_source = self.__read_page_source()
-        self.soup = BeautifulSoup(self.page_source, "lxml")
-        self.extractor = RelativeLinksExtractor()
+    page_source = Path(
+        resources_path,
+        "page_sources",
+        "top_250.html",
+    ).read_text()
+    soup = BeautifulSoup(page_source, "lxml")
 
-    def __read_page_source(self):
-        path = Path(resources_path, "page_sources", "top_250.html")
-        return path.read_text()
+    def setup(self):
+        self.extractor = relative_links_extractor
 
     def test_extract_relative_links(self):
         expected = [

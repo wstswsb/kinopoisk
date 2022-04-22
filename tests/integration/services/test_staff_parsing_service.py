@@ -11,9 +11,14 @@ page_source = read_page_source()
 
 
 class TestStaffParsingService:
+    page_source = Path(
+        resources_path,
+        "page_sources",
+        "sin_city_staff.html",
+    ).read_text()
+
     def setup(self):
         self.service = staff_parsing_service
-        self.page_source = page_source
 
     def test_parse_directors(self):
         expected = [

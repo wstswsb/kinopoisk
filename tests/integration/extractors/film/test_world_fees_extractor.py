@@ -1,14 +1,18 @@
 from pathlib import Path
 from bs4 import BeautifulSoup
-from structure import resources_path
-from extractors.film import WorldFeesExtractor
+from structure import resources_path, world_fees_extractor
 
 
 class TestWorldFeesExtractor:
+    page_source = Path(
+        resources_path,
+        "page_sources",
+        "sin_city.html",
+    ).read_text()
+    soup = BeautifulSoup(page_source, "lxml")
+
     def setup(self):
-        self.page_source = self.__read_page_source()
-        self.soup = BeautifulSoup(self.page_source, "lxml")
-        self.extractor = WorldFeesExtractor("Сборы в мире")
+        self.extractor = world_fees_extractor
 
     def __read_page_source(self):
         path = Path(resources_path, "page_sources", "sin_city.html")

@@ -4,10 +4,15 @@ from structure import resources_path, year_extractor
 
 
 class TestIntAttributeExtractor:
+    page_source = Path(
+        resources_path,
+        "page_sources",
+        "sin_city.html",
+    ).read_text()
+    soup = BeautifulSoup(page_source, "lxml")
+
     def setup(self):
         self.extractor = year_extractor
-        self.page_source = self.__read_page_source()
-        self.soup = BeautifulSoup(self.page_source, "lxml")
 
     def __read_page_source(self):
         path = Path(resources_path, "page_sources", "sin_city.html")

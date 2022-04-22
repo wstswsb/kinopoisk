@@ -1,27 +1,18 @@
 from pathlib import Path
 from bs4 import BeautifulSoup
-from structure import resources_path
-from extractors.staff import NamesExtractor
-
-
-def read_page_source():
-    path = Path(
-        resources_path,
-        "page_sources",
-        "sin_city_only_actors_staff.html",
-    )
-    return path.read_text()
-
-
-page_source = read_page_source()
-soup = BeautifulSoup(page_source, "lxml")
+from structure import resources_path, names_extractor
 
 
 class TestActorsExtractor:
+    page_source = Path(
+        resources_path,
+        "page_sources",
+        "sin_city_only_actors_staff.html",
+    ).read_text()
+    soup = BeautifulSoup(page_source, "lxml")
+
     def setup(self):
-        self.extractor = NamesExtractor()
-        self.page_source = page_source
-        self.soup = soup
+        self.extractor = names_extractor
 
     def test_extract(self):
         expected = [
