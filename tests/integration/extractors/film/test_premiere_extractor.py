@@ -1,7 +1,7 @@
 from pathlib import Path
 from bs4 import BeautifulSoup
 from structure import resources_path
-from extractors import PremiereExtractor
+from extractors.film import PremiereExtractor
 
 
 class TestWorldFeesExtractor:

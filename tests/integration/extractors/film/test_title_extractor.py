@@ -1,6 +1,6 @@
 from pathlib import Path
 from structure import resources_path
-from extractors import FilmTitleExtractor
+from extractors.film import FilmTitleExtractor
 from bs4 import BeautifulSoup
 
 

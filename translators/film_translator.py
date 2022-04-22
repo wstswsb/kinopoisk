@@ -2,6 +2,9 @@ from models import Film
 
 
 class FilmTranslator:
+    def __init__(self, staff_translator):
+        self.staff_translator = staff_translator
+
     def to_document(self, model: Film) -> dict:
         return {
             "_id": model.id,
@@ -10,13 +13,7 @@ class FilmTranslator:
             "country": model.country,
             "genre": model.genre,
             "slogan": model.slogan,
-            "directors": model.directors,
-            "screenwriters": model.screenwriters,
-            "producers": model.producers,
-            "operators": model.operators,
-            "composers": model.composers,
-            "artists": model.artists,
-            "editors": model.editors,
+            "staff": self.staff_translator.to_document(model.staff),
             "budget": model.budget,
             "usa_fees": model.usa_fees,
             "rus_fees": model.rus_fees,
@@ -37,13 +34,11 @@ class FilmTranslator:
         film.country = document.get("country")
         film.genre = document.get("genre")
         film.slogan = document.get("slogan")
-        film.directors = document.get("directors")
-        film.screenwriters = document.get("screenwriters")
-        film.producers = document.get("producers")
-        film.operators = document.get("operators")
-        film.composers = document.get("composers")
-        film.artists = document.get("artists")
-        film.editors = document.get("editors")
+
+        film.staff = self.staff_translator.from_document(
+            document.get("staff", {})
+        )
+
         film.budget = document.get("budget")
         film.usa_fees = document.get("usa_fees")
         film.rus_fees = document.get("rus_fees")

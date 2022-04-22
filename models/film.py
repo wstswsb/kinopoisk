@@ -1,6 +1,8 @@
 from bson import ObjectId
 from typing import Optional, Any
 
+from .staff import Staff
+
 
 class Film:
     def __init__(self):
@@ -10,13 +12,7 @@ class Film:
         self.country: Optional[str] = None
         self.genre: Optional[str] = None
         self.slogan: Optional[str] = None
-        self.directors: Optional[list[str]] = None
-        self.screenwriters: Optional[list[str]] = None
-        self.producers: Optional[list[str]] = None
-        self.operators: Optional[list[str]] = None
-        self.composers: Optional[list[str]] = None
-        self.artists: Optional[list[str]] = None
-        self.editors: Optional[list[str]] = None
+        self.staff: Optional[Staff] = None
         self.budget: Optional[str] = None
         self.usa_fees: Optional[str] = None
         self.rus_fees: Optional[str] = None
@@ -36,13 +32,7 @@ class Film:
         film.country = attrs.get("country")
         film.genre = attrs.get("genre")
         film.slogan = attrs.get("slogan")
-        film.directors = attrs.get("directors")
-        film.screenwriters = attrs.get("screenwriters")
-        film.producers = attrs.get("producers")
-        film.operators = attrs.get("operators")
-        film.composers = attrs.get("composers")
-        film.artists = attrs.get("artists")
-        film.editors = attrs.get("editors")
+        film.staff = Staff.from_attrs(attrs.get("staff", {}))
         film.budget = attrs.get("budget")
         film.usa_fees = attrs.get("usa_fees")
         film.rus_fees = attrs.get("rus_fees")

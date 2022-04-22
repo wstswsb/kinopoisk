@@ -2,15 +2,16 @@ from pathlib import Path
 
 from dependencies import Dependencies
 from repositories import FilmRepository
-from translators import FilmTranslator
+from translators import FilmTranslator, StaffTranslator
 from services import (
     FilmService,
     FilmParsingService,
     FilmScrapingService,
+    StaffParsingService,
 )
 from services.tools import TypesConvertingService
 from wrappers import ChromiumWrapper
-from extractors import (
+from extractors.film import (
     FilmTitleExtractor,
     RelativeLinksExtractor,
     AttributeExtractor,
@@ -21,6 +22,7 @@ from extractors import (
     PremiereExtractor,
     RatingExtractor,
 )
+from extractors.staff import NamesExtractor
 
 root_dir_path = Path(__file__).parent
 resources_path = root_dir_path / "resources"
@@ -28,7 +30,8 @@ resources_path = root_dir_path / "resources"
 deps = Dependencies()
 
 # Translators
-film_translator = FilmTranslator()
+staff_translator = StaffTranslator()
+film_translator = FilmTranslator(staff_translator)
 
 # Repositories
 film_repository = FilmRepository(
@@ -77,14 +80,15 @@ age_restrictions_extractor = AttributeExtractor("Возраст", "age_restricti
 rating_mpaa_extractor = RatingExtractor("Рейтинг MPAA", "rating_mpaa")
 duration_extractor = AttributeExtractor("Время", "duration")
 
+names_extractor = NamesExtractor()
 
 # Wrappers
 
 chromium_wrapper = ChromiumWrapper()
 
 # Services
+staff_parsing_service = StaffParsingService(names_extractor)
 film_parsing_service = FilmParsingService(
-    chromium_wrapper,
     relative_links_extractor,
     title_extractor,
     attributes_extractors=[
@@ -112,10 +116,12 @@ film_parsing_service = FilmParsingService(
     ]
 )
 
+
 film_service = FilmService(film_repository)
 
 film_scraping_service = FilmScrapingService(
     chromium_wrapper,
     film_parsing_service,
+    staff_parsing_service,
     film_service,
 )

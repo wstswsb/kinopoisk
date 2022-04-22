@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from pathlib import Path
 from structure import resources_path
-from extractors import AttributeExtractor
+from extractors.film import AttributeExtractor
 
 
 def read_page_source():

@@ -1,6 +1,6 @@
 from pathlib import Path
 from bs4 import BeautifulSoup
-from extractors import RelativeLinksExtractor
+from extractors.film import RelativeLinksExtractor
 from structure import resources_path
 
 

@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from pathlib import Path
 from structure import resources_path
-from extractors import ListAttributeExtractor
+from extractors.film import ListAttributeExtractor
 
 
 class TestListAttributeExtractor:

@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from pathlib import Path
 from structure import resources_path
-from extractors import RatingExtractor
+from extractors.film import RatingExtractor
 
 
 class TestRatingExtractor:

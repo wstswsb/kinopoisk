@@ -1,4 +1,3 @@
-from pathlib import Path
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -106,3 +105,7 @@ class ExplicitWaitWrapper:
     def until_presence_by_tag(self, tag: str):
         app_logger.debug(f"Wait until presence element with {tag = }")
         self.wait.until(presence_of_element_located((By.TAG_NAME, tag)))
+
+    def until_presence_by_class(self, _class: str):
+        app_logger.debug(f"Wait until presence element with {_class = }")
+        self.wait.until(presence_of_element_located((By.CLASS_NAME, _class)))
